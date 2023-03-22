@@ -1,7 +1,6 @@
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-
 /** @version 1.6.0 */
 class ForthTest extends AnyFunSuite with Matchers {
 
@@ -12,7 +11,6 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("addition - can add two numbers") {
-    pending
     forth.eval("1 2 +").fold(_ => "", _.toString) should be("3")
   }
 
@@ -121,13 +119,16 @@ class ForthTest extends AnyFunSuite with Matchers {
     forth.eval("drop").isLeft should be(true)
   }
 
-  test("swap - swaps the top two values on the stack if they are the only ones") {
+  test(
+    "swap - swaps the top two values on the stack if they are the only ones"
+  ) {
     pending
     forth.eval("1 2 swap").fold(_ => "", _.toString) should be("2 1")
   }
 
   test(
-    "swap - swaps the top two values on the stack if they are not the only ones") {
+    "swap - swaps the top two values on the stack if they are not the only ones"
+  ) {
     pending
     forth.eval("1 2 3 swap").fold(_ => "", _.toString) should be("1 3 2")
   }
@@ -172,7 +173,8 @@ class ForthTest extends AnyFunSuite with Matchers {
   test("user-defined words - execute in the right order") {
     pending
     forth.eval(": countup 1 2 3 ; countup").fold(_ => "", _.toString) should be(
-      "1 2 3")
+      "1 2 3"
+    )
   }
 
   test("user-defined words - can override other user-defined words") {
@@ -199,7 +201,9 @@ class ForthTest extends AnyFunSuite with Matchers {
       .fold(_ => "", _.toString) should be("5 6")
   }
 
-  test("user-defined words - can define word that uses word with the same name") {
+  test(
+    "user-defined words - can define word that uses word with the same name"
+  ) {
     pending
     forth
       .eval(": foo 10 ; : foo foo 1 + ; foo")
@@ -224,25 +228,29 @@ class ForthTest extends AnyFunSuite with Matchers {
   test("case-insensitivity - DROP is case-insensitive") {
     pending
     forth.eval("1 2 3 4 DROP Drop drop").fold(_ => "", _.toString) should be(
-      "1")
+      "1"
+    )
   }
 
   test("case-insensitivity - SWAP is case-insensitive") {
     pending
     forth.eval("1 2 SWAP 3 Swap 4 swap").fold(_ => "", _.toString) should be(
-      "2 3 4 1")
+      "2 3 4 1"
+    )
   }
 
   test("case-insensitivity - OVER is case-insensitive") {
     pending
     forth.eval("1 2 OVER Over over").fold(_ => "", _.toString) should be(
-      "1 2 1 2 1")
+      "1 2 1 2 1"
+    )
   }
 
   test("case-insensitivity - user-defined words are case-insensitive") {
     pending
     forth.eval(": foo dup ; 1 FOO Foo foo").fold(_ => "", _.toString) should be(
-      "1 1 1 1")
+      "1 1 1 1"
+    )
   }
 
   test("case-insensitivity - definitions are case-insensitive") {
