@@ -135,7 +135,6 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("user-defined words - can consist of built-in words") {
-    pending
     forth
       .eval(": dup-twice dup dup ; 1 dup-twice")
       .fold(_ => "", _.toString) should be("1 1 1")

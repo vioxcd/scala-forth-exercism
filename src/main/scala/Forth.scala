@@ -35,20 +35,26 @@ class UDWState {
     udws += (name -> "")
   }
 
-  def updateUDWInputs(input: String) =
+  def updateUDWInputs(input: String) = {
     // https://stackoverflow.com/a/55405528
-    udws = udws.updatedWith(currentlyParsedName)(_.map(_ + " " + input))
+    udws = if (udws(currentlyParsedName) == "") {
+      udws.updated(currentlyParsedName, input)
+    } else {
+      udws.updatedWith(currentlyParsedName)(_.map(_ + " " + input))
+    }
+  }
+
+  def isUDWExists(name: String): Boolean =
+    udws.contains(name)
+
+  def getInputString(name: String): String =
+    udws(name)
 }
 
 class Forth extends ForthEvaluator {
   val udwState = new UDWState
 
   def eval(text: String): Either[ForthError, ForthEvaluatorState] = {
-    // TODO: split the text splitting part and the `foldLeft` operation
-    // so that the `eval` can be reused with UDWs and parametrized by `State`
-    // step:
-    // (1) create brand new State object, delegate the calculation elsewhere
-    // (2) use that same calculation function to delegate udws run
     val state = new State
     evaluate(state, text)
   }
@@ -60,6 +66,8 @@ class Forth extends ForthEvaluator {
     inputs
       .split(" ")
       .foldLeft[Either[ForthError, State]](Right(state))((_state, str) => {
+        // println(s"evaluate _state: ", _state)
+        // println(s"evaluate str: $str")
         _state match {
           case Right(s) => run(s, str)
           case Left(s)  => _state
@@ -68,7 +76,6 @@ class Forth extends ForthEvaluator {
   }
 
   private def run(state: State, str: String): Either[ForthError, State] = {
-    // TODO: create a new class and private ref that maintains the creation of UDWs
     str match {
       case ":" => {
         udwState.markParsingStart
@@ -98,7 +105,9 @@ class Forth extends ForthEvaluator {
       case "drop" => executeStackOps(state, str, 1)
       case "swap" => executeStackOps(state, str, 2)
       case "over" => executeStackOps(state, str, 2)
-      case _      => Left(ForthError.UnknownWord)
+      case str if udwState.isUDWExists(str) =>
+        executeUDWOps(state, str, udwState)
+      case _ => Left(ForthError.UnknownWord)
     }
   }
 
@@ -153,5 +162,17 @@ class Forth extends ForthEvaluator {
         }
       }
     }
+  }
+
+  private def executeUDWOps(
+      state: State,
+      udwName: String,
+      udwState: UDWState
+  ): Either[ForthError, State] = {
+    // val inputString = udwState.getInputString(udwName)
+    // println(s"executeUDWOps state: $state")
+    // println(s"executeUDWOps udwName: $udwName")
+    // println(s"executeUDWOps inputString: $inputString")
+    evaluate(state, udwState.getInputString(udwName))
   }
 }
