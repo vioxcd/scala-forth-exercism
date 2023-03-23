@@ -4,6 +4,10 @@ This is my solution to [Scala's Forth exercism track](https://exercism.org/track
 
 The task is to *"implement an evaluator for a very simple subset of Forth"*
 
+![Exercism's dashboard. You can see it's rated as Hard in difficulty](./images/1-forth-done.png)
+
+## Reflection
+
 It's a really fun exercise, as this is probably my first time implementing a programming language-related things, using a language I'm not entirely familiar with, and in a paradigm I'm still trying to grasp (both OO and FP).
 
 Anyway, I learned a little bit of Forth and several things about programming:
@@ -14,7 +18,7 @@ Anyway, I learned a little bit of Forth and several things about programming:
 
 Caveat: I don't use the `Definition` class that is given in the `ForthEvaluator.scala` file. Not sure how I could make it work with that
 
-Other references I found useful:
+## References I found useful
 
 - [Easy Forth](https://skilldrick.github.io/easyforth/)
 - [Learn X in Y Minutes: Forth](https://learnxinyminutes.com/docs/forth/)
