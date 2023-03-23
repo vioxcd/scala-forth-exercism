@@ -64,8 +64,6 @@ class Forth extends ForthEvaluator {
       .split(" ")
       .map(_.toLowerCase)
       .foldLeft[Either[ForthError, State]](Right(state))((_state, str) => {
-        // println(s"evaluate _state: ", _state)
-        // println(s"evaluate str: $str")
         _state match {
           case Right(s) => run(s, str)
           case Left(s)  => _state
@@ -100,8 +98,8 @@ class Forth extends ForthEvaluator {
         Right(state)
       }
       case str if state.isUDWExists(str) =>
-        // ' putting this here (and above the last case)
-        // ' because of the rules about `able to override built-in words & ops`
+        // putting this here (and above the last case)
+        // because of the rules about `able to override built-in words & ops`
         executeUDWOps(state, str)
       case "+"    => executeArithmeticOps(state, (x, y) => x + y)
       case "-"    => executeArithmeticOps(state, (x, y) => x - y)
@@ -172,10 +170,6 @@ class Forth extends ForthEvaluator {
       state: State,
       udwName: String
   ): Either[ForthError, State] = {
-    // val inputString = state.getInputString(udwName)
-    // println(s"executeUDWOps state: $state")
-    // println(s"executeUDWOps udwName: $udwName")
-    // println(s"executeUDWOps inputString: $inputString")
     evaluate(state, state.getInputString(udwName))
   }
 }
