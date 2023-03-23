@@ -1,5 +1,6 @@
 import ForthError.ForthError
 import scala.collection.mutable.Stack
+import scala.util.{Try, Success, Failure}
 
 class State extends ForthEvaluatorState {
   var stack = Stack[Int]()
@@ -39,10 +40,16 @@ class Forth extends ForthEvaluator {
     if (state.stack.length < 2) {
       Left(ForthError.StackUnderflow)
     } else {
-      val result = state.stack.take(2).reverse.reduce(f)
-      val drop = state.stack.drop(2)
-      state.stack = drop.push(result)
-      Right(state)
+      val result = Try { state.stack.take(2).reverse.reduce(f) }
+
+      result match {
+        case Success(res) => {
+          val drop = state.stack.drop(2)
+          state.stack = drop.push(res)
+          Right(state)
+        }
+        case Failure(res) => Left(ForthError.DivisionByZero)
+      }
     }
   }
 }

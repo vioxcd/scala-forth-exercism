@@ -55,7 +55,6 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("division - errors if dividing by zero") {
-    pending
     forth.eval("4 0 /").isLeft should be(true)
   }
 
