@@ -15,12 +15,10 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("addition - errors if there is nothing on the stack") {
-    pending
     forth.eval("+").isLeft should be(true)
   }
 
   test("addition - errors if there is only one value on the stack") {
-    pending
     forth.eval("1 +").isLeft should be(true)
   }
 

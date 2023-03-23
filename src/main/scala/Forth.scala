@@ -28,10 +28,14 @@ class Forth extends ForthEvaluator {
         Right(state)
       }
       case "+" => {
-        val result = state.stack.take(2).sum
-        val drop = state.stack.drop(2)
-        state.stack = drop.push(result)
-        Right(state)
+        if (state.stack.length < 2) {
+          Left(ForthError.StackUnderflow)
+        } else {
+          val result = state.stack.take(2).sum
+          val drop = state.stack.drop(2)
+          state.stack = drop.push(result)
+          Right(state)
+        }
       }
       case _ => Left(ForthError.UnknownWord)
     }
