@@ -12,17 +12,31 @@ class State extends ForthEvaluatorState {
 
 class Forth extends ForthEvaluator {
   def eval(text: String): Either[ForthError, ForthEvaluatorState] = {
-    text
+    // TODO: split the text splitting part and the `foldLeft` operation
+    // so that the `eval` can be reused with UDWs and parametrized by `State`
+    // step:
+    // (1) create brand new State object, delegate the calculation elsewhere
+    // (2) use that same calculation function to delegate udws run
+    val state = new State
+    evaluate(state, text)
+  }
+
+  private def evaluate(
+      state: State,
+      inputs: String
+  ): Either[ForthError, State] = {
+    inputs
       .split(" ")
-      .foldLeft[Either[ForthError, State]](Right(new State))((state, str) => {
-        state match {
+      .foldLeft[Either[ForthError, State]](Right(state))((_state, str) => {
+        _state match {
           case Right(s) => run(s, str)
-          case Left(s)  => state
+          case Left(s)  => _state
         }
       })
   }
 
   private def run(state: State, str: String): Either[ForthError, State] = {
+    // TODO: create a new class and private ref that maintains the creation of UDWs
     str match {
       case str if str.forall(Character.isDigit) => {
         state.stack.push(str.toInt)
