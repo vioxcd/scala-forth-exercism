@@ -183,40 +183,34 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("case-insensitivity - DUP is case-insensitive") {
-    pending
     forth.eval("1 DUP Dup dup").fold(_ => "", _.toString) should be("1 1 1 1")
   }
 
   test("case-insensitivity - DROP is case-insensitive") {
-    pending
     forth.eval("1 2 3 4 DROP Drop drop").fold(_ => "", _.toString) should be(
       "1"
     )
   }
 
   test("case-insensitivity - SWAP is case-insensitive") {
-    pending
     forth.eval("1 2 SWAP 3 Swap 4 swap").fold(_ => "", _.toString) should be(
       "2 3 4 1"
     )
   }
 
   test("case-insensitivity - OVER is case-insensitive") {
-    pending
     forth.eval("1 2 OVER Over over").fold(_ => "", _.toString) should be(
       "1 2 1 2 1"
     )
   }
 
   test("case-insensitivity - user-defined words are case-insensitive") {
-    pending
     forth.eval(": foo dup ; 1 FOO Foo foo").fold(_ => "", _.toString) should be(
       "1 1 1 1"
     )
   }
 
   test("case-insensitivity - definitions are case-insensitive") {
-    pending
     forth
       .eval(": SWAP DUP Dup dup ; 1 swap")
       .fold(_ => "", _.toString) should be("1 1 1 1")

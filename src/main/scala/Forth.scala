@@ -62,6 +62,7 @@ class Forth extends ForthEvaluator {
   ): Either[ForthError, State] = {
     inputs
       .split(" ")
+      .map(_.toLowerCase)
       .foldLeft[Either[ForthError, State]](Right(state))((_state, str) => {
         // println(s"evaluate _state: ", _state)
         // println(s"evaluate str: $str")
