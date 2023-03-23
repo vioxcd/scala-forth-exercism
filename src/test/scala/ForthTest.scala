@@ -23,17 +23,14 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("subtraction - can subtract two numbers") {
-    pending
     forth.eval("3 4 -").fold(_ => "", _.toString) should be("-1")
   }
 
   test("subtraction - errors if there is nothing on the stack") {
-    pending
     forth.eval("-").isLeft should be(true)
   }
 
   test("subtraction - errors if there is only one value on the stack") {
-    pending
     forth.eval("1 -").isLeft should be(true)
   }
 
