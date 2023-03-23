@@ -10,7 +10,39 @@ class State extends ForthEvaluatorState {
   }
 }
 
+class UDWState {
+  private var currentlyParsing = false
+  private var currentlyParsedName = ""
+  private var currentlyParsedInputs = ""
+  private var udws: Map[String, String] = Map()
+
+  def markParsingStart = currentlyParsing = true
+
+  def markParsingEnd = {
+    currentlyParsing = false
+    currentlyParsedName = ""
+    currentlyParsedInputs = ""
+  }
+
+  def isParsingAndNameNotSet(): Boolean =
+    currentlyParsing && currentlyParsedName == ""
+
+  def isParsingAndNameIsSet(): Boolean =
+    currentlyParsing && currentlyParsedName != ""
+
+  def setUDWName(name: String) = {
+    currentlyParsedName = name
+    udws += (name -> "")
+  }
+
+  def updateUDWInputs(input: String) =
+    // https://stackoverflow.com/a/55405528
+    udws = udws.updatedWith(currentlyParsedName)(_.map(_ + " " + input))
+}
+
 class Forth extends ForthEvaluator {
+  val udwState = new UDWState
+
   def eval(text: String): Either[ForthError, ForthEvaluatorState] = {
     // TODO: split the text splitting part and the `foldLeft` operation
     // so that the `eval` can be reused with UDWs and parametrized by `State`
@@ -38,6 +70,22 @@ class Forth extends ForthEvaluator {
   private def run(state: State, str: String): Either[ForthError, State] = {
     // TODO: create a new class and private ref that maintains the creation of UDWs
     str match {
+      case ":" => {
+        udwState.markParsingStart
+        Right(state)
+      }
+      case ";" => {
+        udwState.markParsingEnd
+        Right(state)
+      }
+      case str if udwState.isParsingAndNameNotSet => {
+        udwState.setUDWName(str)
+        Right(state)
+      }
+      case str if udwState.isParsingAndNameIsSet => {
+        udwState.updateUDWInputs(str)
+        Right(state)
+      }
       case str if str.forall(Character.isDigit) => {
         state.stack.push(str.toInt)
         Right(state)
