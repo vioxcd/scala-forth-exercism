@@ -23,7 +23,7 @@ class Forth extends ForthEvaluator {
 
   private def run(state: State, str: String): Either[ForthError, State] = {
     str match {
-      case "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" => {
+      case str if str.forall(Character.isDigit) => {
         state.stack.push(str.toInt)
         Right(state)
       }

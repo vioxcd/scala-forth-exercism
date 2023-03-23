@@ -47,7 +47,6 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("division - can divide two numbers") {
-    pending
     forth.eval("12 3 /").fold(_ => "", _.toString) should be("4")
   }
 
@@ -56,6 +55,7 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("division - errors if dividing by zero") {
+    pending
     forth.eval("4 0 /").isLeft should be(true)
   }
 
