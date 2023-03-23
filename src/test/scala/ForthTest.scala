@@ -161,7 +161,6 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("user-defined words - can use different words with the same name") {
-    pending
     forth
       .eval(": foo 5 ; : bar foo ; : foo 6 ; bar foo")
       .fold(_ => "", _.toString) should be("5 6")

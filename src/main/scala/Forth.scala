@@ -36,11 +36,16 @@ class UDWState {
   }
 
   def updateUDWInputs(input: String) = {
-    // https://stackoverflow.com/a/55405528
+    // if current input is an already defined UDW, then use its value
+    // instead of taking it as a reference (reference might broke)
+    val checkedInput =
+      if (isUDWExists(input)) udws(input) else input
+
+    // updatedWith: https://stackoverflow.com/a/55405528
     udws = if (udws(currentlyParsedName) == "") {
-      udws.updated(currentlyParsedName, input)
+      udws.updated(currentlyParsedName, checkedInput)
     } else {
-      udws.updatedWith(currentlyParsedName)(_.map(_ + " " + input))
+      udws.updatedWith(currentlyParsedName)(_.map(_ + " " + checkedInput))
     }
   }
 
