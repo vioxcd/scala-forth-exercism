@@ -75,17 +75,14 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("dup - copies a value on the stack") {
-    pending
     forth.eval("1 dup").fold(_ => "", _.toString) should be("1 1")
   }
 
   test("dup - copies the top value on the stack") {
-    pending
     forth.eval("1 2 dup").fold(_ => "", _.toString) should be("1 2 2")
   }
 
   test("dup - errors if there is nothing on the stack") {
-    pending
     forth.eval("dup").isLeft should be(true)
   }
 

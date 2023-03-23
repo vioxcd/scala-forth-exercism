@@ -28,15 +28,19 @@ class Forth extends ForthEvaluator {
         state.stack.push(str.toInt)
         Right(state)
       }
-      case "+" => _run(state, (x, y) => x + y)
-      case "-" => _run(state, (x, y) => x - y)
-      case "*" => _run(state, (x, y) => x * y)
-      case "/" => _run(state, (x, y) => x / y)
-      case _   => Left(ForthError.UnknownWord)
+      case "+"   => executeArithmeticOps(state, (x, y) => x + y)
+      case "-"   => executeArithmeticOps(state, (x, y) => x - y)
+      case "*"   => executeArithmeticOps(state, (x, y) => x * y)
+      case "/"   => executeArithmeticOps(state, (x, y) => x / y)
+      case "dup" => executeStackOps(state, str, 1)
+      case _     => Left(ForthError.UnknownWord)
     }
   }
 
-  private def _run(state: State, f: (Int, Int) => Int) = {
+  private def executeArithmeticOps(
+      state: State,
+      f: (Int, Int) => Int
+  ): Either[ForthError, State] = {
     if (state.stack.length < 2) {
       Left(ForthError.StackUnderflow)
     } else {
@@ -49,6 +53,23 @@ class Forth extends ForthEvaluator {
           Right(state)
         }
         case Failure(res) => Left(ForthError.DivisionByZero)
+      }
+    }
+  }
+
+  private def executeStackOps(
+      state: State,
+      ops: String,
+      k: Int
+  ): Either[ForthError, State] = {
+    if (state.stack.length < k) {
+      Left(ForthError.StackUnderflow)
+    } else {
+      ops match {
+        case "dup" => {
+          state.stack.push(state.stack.top)
+          Right(state)
+        }
       }
     }
   }
