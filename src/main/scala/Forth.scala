@@ -12,6 +12,8 @@ class State extends ForthEvaluatorState {
   def markParsingStart = currentlyParsing = true
 
   def markParsingEnd = {
+    udws += (currentlyParsedName -> currentlyParsedInputs)
+
     currentlyParsing = false
     currentlyParsedName = ""
     currentlyParsedInputs = ""
@@ -25,7 +27,6 @@ class State extends ForthEvaluatorState {
 
   def setUDWName(name: String) = {
     currentlyParsedName = name
-    udws += (name -> "")
   }
 
   def updateUDWInputs(input: String) = {
@@ -34,12 +35,9 @@ class State extends ForthEvaluatorState {
     val checkedInput =
       if (isUDWExists(input)) udws(input) else input
 
-    // updatedWith: https://stackoverflow.com/a/55405528
-    udws = if (udws(currentlyParsedName) == "") {
-      udws.updated(currentlyParsedName, checkedInput)
-    } else {
-      udws.updatedWith(currentlyParsedName)(_.map(_ + " " + checkedInput))
-    }
+    currentlyParsedInputs =
+      if (currentlyParsedInputs == "") checkedInput
+      else currentlyParsedInputs + " " + checkedInput
   }
 
   def isUDWExists(name: String): Boolean =

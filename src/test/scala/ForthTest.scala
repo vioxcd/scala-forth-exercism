@@ -169,7 +169,6 @@ class ForthTest extends AnyFunSuite with Matchers {
   test(
     "user-defined words - can define word that uses word with the same name"
   ) {
-    pending
     forth
       .eval(": foo 10 ; : foo foo 1 + ; foo")
       .fold(_ => "", _.toString) should be("11")
