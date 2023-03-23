@@ -101,24 +101,20 @@ class ForthTest extends AnyFunSuite with Matchers {
   test(
     "swap - swaps the top two values on the stack if they are the only ones"
   ) {
-    pending
     forth.eval("1 2 swap").fold(_ => "", _.toString) should be("2 1")
   }
 
   test(
     "swap - swaps the top two values on the stack if they are not the only ones"
   ) {
-    pending
     forth.eval("1 2 3 swap").fold(_ => "", _.toString) should be("1 3 2")
   }
 
   test("swap - errors if there is nothing on the stack") {
-    pending
     forth.eval("swap").isLeft should be(true)
   }
 
   test("swap - errors if there is only one value on the stack") {
-    pending
     forth.eval("1 swap").isLeft should be(true)
   }
 

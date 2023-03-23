@@ -34,6 +34,7 @@ class Forth extends ForthEvaluator {
       case "/"    => executeArithmeticOps(state, (x, y) => x / y)
       case "dup"  => executeStackOps(state, str, 1)
       case "drop" => executeStackOps(state, str, 1)
+      case "swap" => executeStackOps(state, str, 2)
       case _      => Left(ForthError.UnknownWord)
     }
   }
@@ -73,6 +74,12 @@ class Forth extends ForthEvaluator {
         }
         case "drop" => {
           state.stack.pop
+          Right(state)
+        }
+        case "swap" => {
+          val top = state.stack.pop
+          val next = state.stack.pop
+          state.stack.push(top, next)
           Right(state)
         }
       }
