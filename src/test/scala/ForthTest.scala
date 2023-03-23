@@ -87,17 +87,14 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("drop - removes the top value on the stack if it is the only one") {
-    pending
     forth.eval("1 drop").fold(_ => "", _.toString) should be("")
   }
 
   test("drop - removes the top value on the stack if it is not the only one") {
-    pending
     forth.eval("1 2 drop").fold(_ => "", _.toString) should be("1")
   }
 
   test("drop - errors if there is nothing on the stack") {
-    pending
     forth.eval("drop").isLeft should be(true)
   }
 

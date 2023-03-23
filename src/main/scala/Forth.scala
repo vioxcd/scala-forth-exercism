@@ -28,12 +28,13 @@ class Forth extends ForthEvaluator {
         state.stack.push(str.toInt)
         Right(state)
       }
-      case "+"   => executeArithmeticOps(state, (x, y) => x + y)
-      case "-"   => executeArithmeticOps(state, (x, y) => x - y)
-      case "*"   => executeArithmeticOps(state, (x, y) => x * y)
-      case "/"   => executeArithmeticOps(state, (x, y) => x / y)
-      case "dup" => executeStackOps(state, str, 1)
-      case _     => Left(ForthError.UnknownWord)
+      case "+"    => executeArithmeticOps(state, (x, y) => x + y)
+      case "-"    => executeArithmeticOps(state, (x, y) => x - y)
+      case "*"    => executeArithmeticOps(state, (x, y) => x * y)
+      case "/"    => executeArithmeticOps(state, (x, y) => x / y)
+      case "dup"  => executeStackOps(state, str, 1)
+      case "drop" => executeStackOps(state, str, 1)
+      case _      => Left(ForthError.UnknownWord)
     }
   }
 
@@ -68,6 +69,10 @@ class Forth extends ForthEvaluator {
       ops match {
         case "dup" => {
           state.stack.push(state.stack.top)
+          Right(state)
+        }
+        case "drop" => {
+          state.stack.pop
           Right(state)
         }
       }
