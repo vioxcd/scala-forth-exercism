@@ -119,22 +119,18 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("over - copies the second element if there are only two") {
-    pending
     forth.eval("1 2 over").fold(_ => "", _.toString) should be("1 2 1")
   }
 
   test("over - copies the second element if there are more than two") {
-    pending
     forth.eval("1 2 3 over").fold(_ => "", _.toString) should be("1 2 3 2")
   }
 
   test("over - errors if there is nothing on the stack") {
-    pending
     forth.eval("over").isLeft should be(true)
   }
 
   test("over - errors if there is only one value on the stack") {
-    pending
     forth.eval("1 over").isLeft should be(true)
   }
 
