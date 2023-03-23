@@ -4,13 +4,6 @@ import scala.util.{Try, Success, Failure}
 
 class State extends ForthEvaluatorState {
   var stack = Stack[Int]()
-
-  override def toString = {
-    stack.reverse.mkString(" ")
-  }
-}
-
-class UDWState {
   private var currentlyParsing = false
   private var currentlyParsedName = ""
   private var currentlyParsedInputs = ""
@@ -54,11 +47,12 @@ class UDWState {
 
   def getInputString(name: String): String =
     udws(name)
+  override def toString = {
+    stack.reverse.mkString(" ")
+  }
 }
 
 class Forth extends ForthEvaluator {
-  val udwState = new UDWState
-
   def eval(text: String): Either[ForthError, ForthEvaluatorState] = {
     val state = new State
     evaluate(state, text)
@@ -83,29 +77,29 @@ class Forth extends ForthEvaluator {
   private def run(state: State, str: String): Either[ForthError, State] = {
     str match {
       case ":" => {
-        udwState.markParsingStart
+        state.markParsingStart
         Right(state)
       }
       case ";" => {
-        udwState.markParsingEnd
+        state.markParsingEnd
         Right(state)
       }
-      case str if udwState.isParsingAndNameNotSet => {
-        udwState.setUDWName(str)
+      case str if state.isParsingAndNameNotSet => {
+        state.setUDWName(str)
         Right(state)
       }
-      case str if udwState.isParsingAndNameIsSet => {
-        udwState.updateUDWInputs(str)
+      case str if state.isParsingAndNameIsSet => {
+        state.updateUDWInputs(str)
         Right(state)
       }
       case str if str.forall(Character.isDigit) => {
         state.stack.push(str.toInt)
         Right(state)
       }
-      case str if udwState.isUDWExists(str) =>
+      case str if state.isUDWExists(str) =>
         // ' putting this here (and above the last case)
         // ' because of the rules about `able to override built-in words & ops`
-        executeUDWOps(state, str, udwState)
+        executeUDWOps(state, str)
       case "+"    => executeArithmeticOps(state, (x, y) => x + y)
       case "-"    => executeArithmeticOps(state, (x, y) => x - y)
       case "*"    => executeArithmeticOps(state, (x, y) => x * y)
@@ -173,13 +167,12 @@ class Forth extends ForthEvaluator {
 
   private def executeUDWOps(
       state: State,
-      udwName: String,
-      udwState: UDWState
+      udwName: String
   ): Either[ForthError, State] = {
-    // val inputString = udwState.getInputString(udwName)
+    // val inputString = state.getInputString(udwName)
     // println(s"executeUDWOps state: $state")
     // println(s"executeUDWOps udwName: $udwName")
     // println(s"executeUDWOps inputString: $inputString")
-    evaluate(state, udwState.getInputString(udwName))
+    evaluate(state, state.getInputString(udwName))
   }
 }
