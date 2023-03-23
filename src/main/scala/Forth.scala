@@ -97,6 +97,10 @@ class Forth extends ForthEvaluator {
         state.stack.push(str.toInt)
         Right(state)
       }
+      case str if udwState.isUDWExists(str) =>
+        // ' putting this here (and above the last case)
+        // ' because of the rules about `able to override built-in words & ops`
+        executeUDWOps(state, str, udwState)
       case "+"    => executeArithmeticOps(state, (x, y) => x + y)
       case "-"    => executeArithmeticOps(state, (x, y) => x - y)
       case "*"    => executeArithmeticOps(state, (x, y) => x * y)
@@ -105,9 +109,7 @@ class Forth extends ForthEvaluator {
       case "drop" => executeStackOps(state, str, 1)
       case "swap" => executeStackOps(state, str, 2)
       case "over" => executeStackOps(state, str, 2)
-      case str if udwState.isUDWExists(str) =>
-        executeUDWOps(state, str, udwState)
-      case _ => Left(ForthError.UnknownWord)
+      case _      => Left(ForthError.UnknownWord)
     }
   }
 
