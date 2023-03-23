@@ -175,12 +175,10 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("user-defined words - cannot redefine numbers") {
-    pending
     forth.eval(": 1 2 ;").isLeft should be(true)
   }
 
   test("user-defined words - errors if executing a non-existent word") {
-    pending
     forth.eval("foo").isLeft should be(true)
   }
 

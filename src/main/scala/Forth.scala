@@ -83,8 +83,12 @@ class Forth extends ForthEvaluator {
         Right(state)
       }
       case str if state.isParsingAndNameNotSet => {
-        state.setUDWName(str)
-        Right(state)
+        if (str.forall(Character.isDigit)) {
+          Left(ForthError.InvalidWord)
+        } else {
+          state.setUDWName(str)
+          Right(state)
+        }
       }
       case str if state.isParsingAndNameIsSet => {
         state.updateUDWInputs(str)
