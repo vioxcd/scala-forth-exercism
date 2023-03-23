@@ -29,6 +29,8 @@ class Forth extends ForthEvaluator {
       }
       case "+" => _run(state, (x, y) => x + y)
       case "-" => _run(state, (x, y) => x - y)
+      case "*" => _run(state, (x, y) => x * y)
+      case "/" => _run(state, (x, y) => x / y)
       case _   => Left(ForthError.UnknownWord)
     }
   }

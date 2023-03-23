@@ -35,17 +35,14 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("multiplication - can multiply two numbers") {
-    pending
     forth.eval("2 4 *").fold(_ => "", _.toString) should be("8")
   }
 
   test("multiplication - errors if there is nothing on the stack") {
-    pending
     forth.eval("*").isLeft should be(true)
   }
 
   test("multiplication - errors if there is only one value on the stack") {
-    pending
     forth.eval("1 *").isLeft should be(true)
   }
 
@@ -55,22 +52,18 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("division - performs integer division") {
-    pending
     forth.eval("8 3 /").fold(_ => "", _.toString) should be("2")
   }
 
   test("division - errors if dividing by zero") {
-    pending
     forth.eval("4 0 /").isLeft should be(true)
   }
 
   test("division - errors if there is nothing on the stack") {
-    pending
     forth.eval("/").isLeft should be(true)
   }
 
   test("division - errors if there is only one value on the stack") {
-    pending
     forth.eval("1 /").isLeft should be(true)
   }
 
