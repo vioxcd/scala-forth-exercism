@@ -67,12 +67,10 @@ class ForthTest extends AnyFunSuite with Matchers {
   }
 
   test("combined arithmetic - addition and subtraction") {
-    pending
     forth.eval("1 2 + 4 -").fold(_ => "", _.toString) should be("-1")
   }
 
   test("combined arithmetic - multiplication and division") {
-    pending
     forth.eval("2 4 * 3 /").fold(_ => "", _.toString) should be("2")
   }
 
